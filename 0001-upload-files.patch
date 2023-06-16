@@ -1,0 +1,60 @@
+From bec3fecc2624e4c5585301548446eff63dc02308 Mon Sep 17 00:00:00 2001
+From: pth1209 <113861167+pth1209@users.noreply.github.com>
+Date: Fri, 16 Jun 2023 06:07:25 -0500
+Subject: [PATCH] upload files
+
+---
+ client3.py     | 4 ++--
+ client_test.py | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/client3.py b/client3.py
+index 3fc09b7..ef8afd5 100644
+--- a/client3.py
++++ b/client3.py
+@@ -35,14 +35,14 @@ def getDataPoint(quote):
+     stock = quote['stock']
+     bid_price = float(quote['top_bid']['price'])
+     ask_price = float(quote['top_ask']['price'])
+-    price = bid_price
++    price = float((bid_price + ask_price) / 2)
+     return stock, bid_price, ask_price, price
+ 
+ 
+ def getRatio(price_a, price_b):
+     """ Get ratio of price_a and price_b """
+     """ ------------- Update this function ------------- """
+-    return 1
++    return price_a / price_b
+ 
+ 
+ # Main
+diff --git a/client_test.py b/client_test.py
+index af2bf26..67cd907 100644
+--- a/client_test.py
++++ b/client_test.py
+@@ -8,6 +8,8 @@ class ClientTest(unittest.TestCase):
+       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
+     ]
+     """ ------------ Add the assertion below ------------ """
++    for quote in quotes:
++      self.assertEqual(getDataPoint(quote), (quote["stock"], quote["top_bid"]["price"], quote["top_ask"]["price"], (quote["top_bid"]["price"] + quote["top_ask"]["price"])/2))
+ 
+   def test_getDataPoint_calculatePriceBidGreaterThanAsk(self):
+     quotes = [
+@@ -15,10 +17,8 @@ class ClientTest(unittest.TestCase):
+       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
+     ]
+     """ ------------ Add the assertion below ------------ """
+-
+-
+-  """ ------------ Add more unit tests ------------ """
+-
++    for quote in quotes:
++      self.assertEqual(getDataPoint(quote), (quote["stock"], quote["top_bid"]["price"], quote["top_ask"]["price"], (quote["top_bid"]["price"] + quote["top_ask"]["price"])/2))
+ 
+ 
+ if __name__ == '__main__':
+-- 
+2.39.2 (Apple Git-143)
+
